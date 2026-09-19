@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  NASABAH
+}
+
+enum JenisSampah {
+  plastik
+  kertas
+  logam
+  kaca
+}
+
+enum StatusSetor {
+  menunggu_konfirmasi
+  diverifikasi
+  ditolak
+  selesai
+}
+
+enum StatusPenukaran {
+  diproses
+  selesai
+}
+
+model User {
+  id         String   @id @default(uuid())
+  username   String   @unique
+  password   String
+  role       UserRole
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  nasabah   Nasabah?
+  adminBank AdminBank?
+
+  @@map("users")
+}
+
+model Nasabah {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  namaNasabah  String
+  alamat       String    @db.Text
+  telp         String
+  saldoPoin    Int       @default(0)
+  foto         String?   @db.VarChar(255)
+  tanggalLahir DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  setorSampah  SetorSampah[]
+  penukaran    PenukaranPoin[]
+
+  @@map("nasabah")
+}
+
+model AdminBank {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  namaUnit       String
+  namaPengelola  String
+  telp           String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  setorSampah SetorSampah[]
+
+  @@map("admin_bank")
+}
+
+model KategoriSampah {
+  id           String      @id @default(uuid())
+  namaKategori String
+  hargaPerKg   Float
+  poinPerKg    Float
+  jenis        JenisSampah
+  foto         String?     @db.VarChar(255)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  detailSetor  DetailSetor[]
+
+  @@map("kategori_sampah")
+}
+
+model SetorSampah {
+  id            String      @id @default(uuid())
+  kodeSetor     String      @unique
+  tanggal       DateTime
+  idNasabah     String
+  idAdmin       String?
+  status        StatusSetor @default(menunggu_konfirmasi)
+  totalBeratKg  Float       @default(0)
+  totalPoin     Int         @default(0)
+  catatan       String?     @db.Text
+  catatanAdmin  String?     @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  nasabah     Nasabah       @relation(fields: [idNasabah], references: [id], onDelete: Cascade)
+  admin       AdminBank?    @relation(fields: [idAdmin], references: [id], onDelete: SetNull)
+  detailSetor DetailSetor[]
+
+  @@index([idNasabah])
+  @@map("setor_sampah")
+}
+
+model DetailSetor {
+  id                String   @id @default(uuid())
+  idSetor           String
+  idKategoriSampah  String
+  beratKg           Float
+  beratKgReal       Float?
+  subtotalPoin      Int      @default(0)
+  createdAt         DateTime @default(now())
+
+  setorSampah    SetorSampah    @relation(fields: [idSetor], references: [id], onDelete: Cascade)
+  kategoriSampah KategoriSampah @relation(fields: [idKategoriSampah], references: [id], onDelete: Restrict)
+
+  @@index([idSetor])
+  @@index([idKategoriSampah])
+  @@map("detail_setor")
+}
+
+model Hadiah {
+  id              String   @id @default(uuid())
+  namaHadiah      String
+  poinDibutuhkan  Int
+  stok            Int      @default(0)
+  foto            String?  @db.VarChar(255)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  penukaranPoin PenukaranPoin[]
+
+  @@map("hadiah")
+}
+
+model PenukaranPoin {
+  id             String          @id @default(uuid())
+  kodePenukaran  String          @unique
+  tanggal        DateTime        @default(now())
+  idNasabah      String
+  idHadiah       String
+  poinTerpakai   Int
+  status         StatusPenukaran @default(diproses)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  nasabah Nasabah @relation(fields: [idNasabah], references: [id], onDelete: Cascade)
+  hadiah  Hadiah  @relation(fields: [idHadiah], references: [id], onDelete: Restrict)
+
+  @@index([idNasabah])
+  @@map("penukaran_poin")
+}

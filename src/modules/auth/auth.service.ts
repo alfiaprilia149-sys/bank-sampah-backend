@@ -148,11 +148,6 @@ export class AuthService {
     };
   }
 
-  /**
-   * Endpoint tambahan (tidak tercantum di tabel 37 endpoint Kontrak
-   * API, tapi wajib ada untuk memenuhi fitur Admin poin #3:
-   * "Admin dapat update data profil unit bank sampah").
-   */
   async updateAdminProfile(userId: string, dto: UpdateAdminProfileDto) {
     const adminBank = await this.prisma.adminBank.findUnique({ where: { userId } });
 

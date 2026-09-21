@@ -86,8 +86,6 @@ export class HadiahService {
     try {
       await this.prisma.hadiah.delete({ where: { id: hadiah.id } });
     } catch (error) {
-      // P2003 = masih dipakai di PenukaranPoin (onDelete: Restrict)
-      // supaya histori transaksi penukaran lama tidak ikut rusak.
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
         throw new BadRequestException(
           'Hadiah tidak dapat dihapus karena sudah pernah ditukar oleh nasabah.',

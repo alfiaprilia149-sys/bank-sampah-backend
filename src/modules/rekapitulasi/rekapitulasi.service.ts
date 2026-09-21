@@ -10,8 +10,6 @@ export class RekapitulasiService {
   constructor(private prisma: PrismaService) {}
 
   async getBulanan(bulan?: string) {
-    // ?bulan wajib diisi sesuai Kontrak API (beda dari filter opsional
-    // di endpoint lain seperti setor-sampah/my-setor).
     const range = parseBulanFilter(bulan);
     if (!range) {
       throw new BadRequestException('Query parameter bulan wajib diisi dengan format YYYY-MM.');

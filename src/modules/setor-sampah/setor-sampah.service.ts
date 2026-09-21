@@ -8,10 +8,6 @@ import { parseBulanFilter } from '../../common/utils/date-filter.util';
 @Injectable()
 export class SetorSampahService {
   constructor(private prisma: PrismaService) {}
-
-  // ------------------------------------------------------------
-  // NASABAH: Ajukan penyetoran sampah (multi-item, estimasi berat)
-  // ------------------------------------------------------------
   async createPengajuan(nasabahId: string, dto: CreateSetorSampahDto) {
     const kategoriIds = dto.items.map((item) => item.kategoriSampahId);
 
@@ -72,9 +68,6 @@ export class SetorSampahService {
     };
   }
 
-  // ------------------------------------------------------------
-  // NASABAH: Histori & status penyetoran milik sendiri
-  // ------------------------------------------------------------
   async findMySetor(nasabahId: string, bulan?: string) {
     const range = parseBulanFilter(bulan);
 
@@ -97,9 +90,6 @@ export class SetorSampahService {
     };
   }
 
-  // ------------------------------------------------------------
-  // ADMIN: Semua pengajuan (filter status & bulan)
-  // ------------------------------------------------------------
   async findAllForAdmin(status?: string, bulan?: string) {
     const range = parseBulanFilter(bulan);
 
@@ -120,9 +110,6 @@ export class SetorSampahService {
     };
   }
 
-  // ------------------------------------------------------------
-  // NASABAH & ADMIN: Detail transaksi / struk nota
-  // ------------------------------------------------------------
   async findOne(id: string, currentUser: any) {
     const setor = await this.prisma.setorSampah.findUnique({
       where: { id },
@@ -165,9 +152,6 @@ export class SetorSampahService {
     };
   }
 
-  // ------------------------------------------------------------
-  // ADMIN: Verifikasi & finalisasi timbangan real
-  // ------------------------------------------------------------
   async verify(id: string, adminId: string, dto: VerifySetorSampahDto) {
     const setor = await this.prisma.setorSampah.findUnique({
       where: { id },

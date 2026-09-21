@@ -1,8 +1,3 @@
-/**
- * Generate kode transaksi mengikuti pola contoh di Kontrak API:
- *   Setor    -> STR-202608-1002
- *   Penukaran-> TKR-202608-5001
- */
 function randomSuffix(length = 4): string {
   return Math.floor(Math.random() * 10 ** length)
     .toString()

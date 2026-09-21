@@ -10,14 +10,6 @@ export interface JwtPayload {
   role: 'ADMIN' | 'NASABAH';
 }
 
-/**
- * Strategy ini memvalidasi Bearer token milik Nasabah & Admin Bank.
- * Didaftarkan sebagai provider di AuthModule, tapi dipakai lintas
- * modul lain lewat JwtAuthGuard (src/common/guards/jwt-auth.guard.ts)
- * yang mereferensikan nama strategy 'jwt-user' -- modul manapun
- * tinggal @UseGuards(JwtAuthGuard) tanpa perlu import class ini
- * secara langsung.
- */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt-user') {
   constructor(

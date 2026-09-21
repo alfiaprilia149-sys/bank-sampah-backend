@@ -9,12 +9,6 @@ import {
 import { Response } from 'express';
 import { Prisma } from '@prisma/client';
 
-/**
- * Menangkap SEMUA exception (HttpException NestJS, Prisma error,
- * maupun error tak terduga) dan mengubahnya jadi format baku:
- * { statusCode, success: false, message, errors, timestamp }
- * sesuai Kontrak API bagian "Format Error".
- */
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);

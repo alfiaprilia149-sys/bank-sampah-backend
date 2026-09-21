@@ -13,20 +13,17 @@ async function bootstrap() {
   // Semua endpoint di Kontrak API diawali /api/v1/...
   app.setGlobalPrefix('api/v1');
 
-  // Serve folder /uploads sebagai file statis, contoh akses:
-  // http://localhost:3000/uploads/<nama-file>.jpg
   app.useStaticAssets(join(process.cwd(), 'uploads'), { prefix: '/uploads/' });
 
   // Validasi otomatis semua DTO (class-validator)
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // buang field yang tidak terdaftar di DTO
+      whitelist: true, 
       forbidNonWhitelisted: false,
-      transform: true, // auto-transform payload ke instance DTO/type
+      transform: true,
     }),
   );
 
-  // Format response sukses & error yang seragam (sesuai spec)
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new HttpExceptionFilter());
 
@@ -35,13 +32,12 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Bank Sampah Digital & Daur Ulang API')
     .setDescription(
-      'Dokumentasi RESTful API untuk UKK RPL 2026/2027 - Eco-Waste Management System. ' +
-        'Endpoint yang butuh login Nasabah/Admin wajib Bearer token dari /auth/login.',
+      'Dokumentasi RESTful API - Eco-Waste Management System.' 
     )
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      'bearer', // nama security scheme, dipakai di @ApiBearerAuth('bearer')
+      'bearer', 
     )
     .build();
 

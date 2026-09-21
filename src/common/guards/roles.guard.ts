@@ -2,13 +2,6 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY, AppRole } from '../decorators/roles.decorator';
 
-/**
- * Guard KETIGA (setelah AppKeyGuard & JwtAuthGuard). Mengecek
- * apakah `req.user.role` termasuk dalam daftar @Roles(...) yang
- * dipasang di controller/handler. Jika endpoint tidak memasang
- * @Roles() sama sekali, guard ini otomatis lolos (artinya semua
- * role yang sudah login boleh akses).
- */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

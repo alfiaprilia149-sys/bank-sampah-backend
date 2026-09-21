@@ -34,9 +34,6 @@ export class PenukaranPoinService {
 
     const kodePenukaran = generateKodePenukaran();
     const sisaSaldoPoin = nasabah.saldoPoin - hadiah.poinDibutuhkan;
-
-    // ---- Operasi berikut WAJIB atomik: kurangi saldo poin nasabah
-    // DAN kurangi stok hadiah harus sama-sama berhasil atau gagal. ----
     const [penukaran] = await this.prisma.$transaction([
       this.prisma.penukaranPoin.create({
         data: {

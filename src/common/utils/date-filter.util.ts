@@ -1,9 +1,3 @@
-/**
- * Parse filter query `?bulan=YYYY-MM` jadi range tanggal untuk
- * Prisma `where: { tanggal: { gte, lt } }`. Dipakai di beberapa
- * endpoint yang punya filter bulan (setor-sampah, penukaran-poin,
- * rekapitulasi).
- */
 export function parseBulanFilter(bulan?: string): { gte: Date; lt: Date } | undefined {
   if (!bulan) return undefined;
 

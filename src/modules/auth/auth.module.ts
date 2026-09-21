@@ -18,11 +18,6 @@ import { jwtConfigFactory } from '../../config/jwt.config';
     }),
   ],
   controllers: [AuthController, AdminProfileController],
-  // JwtStrategy didaftarkan di sini (bukan di maker) karena inilah
-  // modul yang benar-benar memakainya untuk validasi Bearer token
-  // Nasabah & Admin. JwtAuthGuard di endpoint modul LAIN (nasabah,
-  // setor-sampah, dst nanti) tetap bisa pakai strategy 'jwt-user' ini
-  // selama AuthModule sudah di-import di AppModule.
   providers: [AuthService, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
 })

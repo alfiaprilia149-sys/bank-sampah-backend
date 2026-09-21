@@ -113,9 +113,6 @@ export class NasabahService {
 
   async remove(id: string) {
     const nasabah = await this.findNasabahOrThrow(id);
-
-    // Hapus lewat User (parent), bukan langsung Nasabah, supaya
-    // konsisten dengan relasi 1:1 (onDelete: Cascade di schema).
     await this.prisma.user.delete({ where: { id: nasabah.userId } });
 
     return {

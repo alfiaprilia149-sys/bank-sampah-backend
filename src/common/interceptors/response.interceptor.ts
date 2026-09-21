@@ -14,15 +14,6 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-/**
- * Setiap service HANYA perlu `return { message, data }`.
- * Interceptor ini yang membungkusnya jadi format baku sesuai
- * Kontrak API bagian "Struktur Baku Response JSON":
- * { statusCode, success: true, message, data }
- *
- * Jika service cuma return data mentah (tanpa {message,data}),
- * interceptor tetap fallback pakai message default.
- */
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse<T>> {

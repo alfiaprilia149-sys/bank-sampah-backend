@@ -16,7 +16,7 @@ export class AdminProfileController {
   constructor(private readonly authService: AuthService) {}
 
   // PUT /api/v1/admin/profile - Khusus Admin
-  @ApiOperation({ summary: 'Update Data Profil Unit Bank Sampah (endpoint tambahan, lihat catatan)' })
+  @ApiOperation({ summary: 'Update Data Profil Unit Bank Sampah (endpoint tambaha)' })
   @Put()
   updateProfile(@CurrentUser() user: any, @Body() dto: UpdateAdminProfileDto) {
     return this.authService.updateAdminProfile(user.id, dto);
